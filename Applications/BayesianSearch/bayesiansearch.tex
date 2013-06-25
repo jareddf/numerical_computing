@@ -37,13 +37,12 @@ r_{i} & = \mathbb{P}(A_{i}) \\
 We proceed by searching in location $k$, where $k = \text{argmax}_{i} r_{i}$.
 
 \begin{problem}
-Write a function that accepts two $20 \times 20$ arrays, $p$ and $q$, and returns the index pair $i,j$ of the next search location.
+Write a function that accepts two $20 \times 20$ arrays, $p$ and $q$, and returns the index pair $x,y$ of the next search location.
 \end{problem}
 
 If a search is successful, then our search is over. If unsuccessful, we update our probabilities $p$ given this new information. If we searched in location $j$ and didn't find the plane (event  $A_j^c$), then according to Bayes Rule 
 \begin{equation*}
 \mathbb{P}(B_{i} \; | \; A_j^c) 
-= \frac{\mathbb{P}(A_j^c \; | \; B_{i})\mathbb{P}(B_{i})}{\mathbb{P}(A_j^c \; | \; B_{i})\mathbb{P}(B_{i}) + \mathbb{P}(A_j^c \; | \; B_{i}^{c})\mathbb{P}(B_{i}^{c})} 
 = \frac{\mathbb{P}(A_j^c \; | \; B_{i})\mathbb{P}(B_{i})}{\mathbb{P}(A_j^c)}.
 \end{equation*}
 For the location we searched (where $i=j$), the posterior becomes 
@@ -54,20 +53,20 @@ For the location we searched (where $i=j$), the posterior becomes
  For all other locations (where $i \neq j$) the posterior is $$\frac{\mathbb{P}(A_j^c \; | \; B_{i})\mathbb{P}(B_{i})}{\mathbb{P}(A_j^c)} =\frac{(1)(p_i)}{1-\mathbb{P}(A_j)} = \frac{p_j}{1-p_j q_j}$$
 
 
-Thus our posterior probability for location $i$, given that we search location $j$ and found nothing is
+Thus our posterior probability for location $i$, given that we searched location $j$ and found nothing is
 $$\tilde{p}_{i} = \begin{cases} 
  p_{i}\frac{1-q_{i}}{1-p_{i}q_{i}} & ,  i=j \\
 \frac{p_{i}}{1-p_{j}q_{j}} & , i \neq j 
 \end{cases}.$$
 
 \begin{problem}
-Write a function that accepts two $20 \times 20$ arrays, $p$ and $q$, as well as an index pair $i,j$ of search coordinates for the most recent unsuccessful search, and returns the posterior probabilities $\tilde{p}_{k,l}$ for each possible location $k,l$, where $1 \leq k,l \leq 20$.
+Write a function that accepts two $20 \times 20$ arrays, $p$ and $q$, as well as an index pair $x,y$ of search coordinates for the most recent unsuccessful search, and returns the posterior probabilities $\tilde{p}_{k,l}$ for each possible location $k,l$, where $1 \leq k,l \leq 20$.
 \end{problem}
 
 Using our computed posterior probability and our success probabilities, we compute $r$ again, and choose a search location, continuing this procedure until success.
 
 \begin{problem}
-Write a function to simulate the search procedure. It should accept two $20 \times 20$ arrays, $p$ and $q$, where $p$ is our initial prior on the location of the vessel and $q$ contains the probability of success for each grid location. It should also accept the actual location $i,j$ of the vessel. During the simulation process, assume that $q$ is correct, i.e. given that we search in location $i,j$, we will successfully find the vessel with probability $q_{i,j}$. The function should return the number of search iterations until success, as well as the location of the vessel (but don't hardcode this!).
+Write a function to simulate the search procedure. It should accept two $20 \times 20$ arrays, $p$ and $q$, where $p$ is our initial prior on the location of the vessel and $q$ contains the probability of success for each grid location. It should also accept the actual location $x,y$ of the vessel. During the simulation process, assume that $q$ is correct, i.e. given that we search in location $x,y$, we will successfully find the vessel with probability $q_{x,y}$. The function should return the number of search iterations until success, as well as the location of the vessel (but don't hardcode this!).
 \end{problem}
 
 We have roughly examined the ocean depths in the vicinity of the crash, and computed the probabilities of success if we search a location, given it is the correct location of the plane (this is simply a function of depth). We have also computed an initial prior on the location, with locations nearer the final point of contact having higher probabilities than locations further away. These are represented as $20 \times 20$ arrays, and are located in the files \emph{depthProbs} and \emph{prior}, respectively.
